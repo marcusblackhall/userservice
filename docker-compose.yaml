@@ -16,6 +16,7 @@ services:
       - 5434:5432
 # spring boot rest service
   users:
+
     container_name: users
     depends_on:
       - db
@@ -27,3 +28,19 @@ services:
       - SPRING_DATASOURCE_PASSWORD=marcus
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     build: .
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+
+
+
+
+
+
+
+
+
