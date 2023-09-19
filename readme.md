@@ -78,7 +78,6 @@ docker compose down
 ```
 
 ```mermaid
-%%{init: {'theme':'forest'}}%%
 flowchart LR
   db[(db)] --> |database,postgres |users
   port1((port:8080)) .-> users
