@@ -9,9 +9,9 @@ Ensure your local docker is running.
 
 Go to the root folder of the project (_where the docker-compose file is_) and type :
 ```shell
-./mvnw install 
-docker-compose build
-docker-compose up
+./mvnw install && \
+docker compose build && \ 
+docker compose up
 ```
 ## Checking the service works
 After starting the service ensure the service is up and running with your favourite http client. I use httpie. Go to a command terminal and type in:
@@ -74,5 +74,13 @@ http DELETE :8080/users/1
 ```
 ## Stopping the service
 ```shell
-docker-compose down
+docker compose down
+```
+
+```mermaid
+flowchart LR
+  db[db : Postgres database] --> users
+  port1((port: 8080)) --> users
+  port2((port: 5432)) --> db
+  users[users : spring boot rest service]
 ```

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,6 +44,11 @@ public class UserRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUserById(@PathVariable Integer id) {
+
+        Optional<User> byId = userJpaRepository.findById(id);
+        if (byId.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
 
         userJpaRepository.deleteById(id);
         return ResponseEntity.ok().build();
