@@ -79,8 +79,8 @@ docker compose down
 
 ```mermaid
 flowchart LR
-  db[db : Postgres database] --> users
-  port1((port: 8080)) --> users
-  port2((port: 5432)) --> db
+  db[(db)] --> |database,postgres |users
+  port1((port: 8080)) .-> users
+  port2((port: 5432)) .-> db
   users[users : spring boot rest service]
 ```
