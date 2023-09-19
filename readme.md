@@ -78,11 +78,12 @@ docker compose down
 ```
 
 ```mermaid
+%%{init: {'theme':'forest'}}%%
 flowchart LR
   db[(db)] --> |database,postgres |users
-  port1((port: 8080)) .-> users
-  port2((port: 5432)) .-> db
-  volume1{{./postgresdata}}  -.-|/var/lib/postgresql/data| db
-  volume2{{./src/main/resources/initdb}}    -.-|/docker-entrypoint-initdb.d/| db
+  port1((port:8080)) .-> users
+  port2((port:5432)) .-> db
+  volume1{{./postgresdata}}  x-.-x|/var/lib/postgresql/data| db
+  volume2{{./src/main/resources/initdb}}    x-.-x|/docker-entrypoint-initdb.d/| db
   users[users : spring boot rest service]
 ```
