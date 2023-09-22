@@ -2,6 +2,17 @@
 A rest service for maintaining users in a postgres database. A docker compose file that has the following services :
 - **users** : the springboot application for the userservice 
 - **db**    : a postgres database with a users table
+  ``
+## Docker Compose Diagram
+```mermaid
+flowchart LR
+  db[(db)] --> |database,postgres |users
+  port1((port:8080)) .-> users
+  port2((port:5432)) .-> db
+  volume1{{./postgresdata}}  x-.-x|/var/lib/postgresql/data| db
+  volume2{{./src/main/resources/initdb}}    x-.-x|/docker-entrypoint-initdb.d/| db
+  users[users : spring boot rest service]
+```
 
 ## Starting the service
 
@@ -56,7 +67,7 @@ Transfer-Encoding: chunked
 ```
 ## Using the service
 
-All of the terminal commands below use httpie. If you want to know how that works go to the site [httpie](https://httpie.io)
+All of the terminal commands below use [httpie](https://httpie.io). 
 ### Add a user
 
 ```shell
@@ -75,14 +86,4 @@ http DELETE :8080/users/1
 ## Stopping the service
 ```shell
 docker compose down
-```
-
-```mermaid
-flowchart LR
-  db[(db)] --> |database,postgres |users
-  port1((port:8080)) .-> users
-  port2((port:5432)) .-> db
-  volume1{{./postgresdata}}  x-.-x|/var/lib/postgresql/data| db
-  volume2{{./src/main/resources/initdb}}    x-.-x|/docker-entrypoint-initdb.d/| db
-  users[users : spring boot rest service]
-```
+`
