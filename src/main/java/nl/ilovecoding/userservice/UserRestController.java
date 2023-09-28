@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,6 +45,17 @@ public class UserRestController {
         return ResponseEntity.ok(
                 users.stream().map(userMapper::userToUserDto).collect(Collectors.toList()));
 
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> editUser(@PathVariable("id") Integer id, @Valid @RequestBody UserDto userDto) {
+        Optional<User> user = userJpaRepository.findById(id);
+        if (user.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User updatedUser = userMapper.userDtoToUser(userDto);
+        updatedUser.setId(id);
+        return ResponseEntity.ok(userMapper.userToUserDto(userJpaRepository.save(updatedUser)));
     }
 
     @GetMapping("/{id}")

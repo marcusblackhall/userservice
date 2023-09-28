@@ -51,6 +51,21 @@ public class UserServiceIT {
         restUrl = "http://localhost:" + port + "/users";
 
     }
+    
+    @Test
+    void shouldEditAUser() {
+        UserDto user = addUser();
+        user.setName("John Doe");
+        user.setEmail("jdoe@email.nl");
+
+        HttpEntity<UserDto> requestEntity = new HttpEntity<>(user);
+        ResponseEntity<UserDto> responseEntity = restTemplate.exchange(restUrl + "/" + user.getId(), HttpMethod.PUT, requestEntity, UserDto.class);
+
+        UserDto updatedUser = responseEntity.getBody();
+        assertNotNull(updatedUser);
+        assertThat(updatedUser.getName()).isEqualTo("John Doe");
+        assertThat(updatedUser.getEmail()).isEqualTo("jdoe@email.nl");
+    }
 
     @Test
     void shouldAddAUser() {
