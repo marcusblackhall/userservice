@@ -1,4 +1,4 @@
-# contaner for java 17 with spring boot app userservice
+# container for java 17 with spring boot app userservice
 FROM eclipse-temurin:17
 VOLUME /tmp
 

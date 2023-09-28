@@ -1,20 +1,27 @@
 package nl.ilovecoding.userservice.domain;
 
-import jakarta.persistence.*;
-import lombok.ToString;
-
 import java.util.Objects;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.ToString;
 
 @Entity
 @Table(schema = "userschema")
 @ToString
 public class User {
 
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id ;
-    private String name;
+    private Integer id;
+    
     private String email;
+
+    private String name;
 
     public Integer getId() {
         return id;
@@ -42,8 +49,10 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         User user = (User) o;
         return Objects.equals(id, user.id);
     }

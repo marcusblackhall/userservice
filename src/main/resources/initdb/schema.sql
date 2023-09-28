@@ -1,3 +1,4 @@
+
 CREATE SCHEMA IF NOT EXISTS userschema;
 
 CREATE TABLE IF NOT EXISTS userschema.user
