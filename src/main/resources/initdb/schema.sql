@@ -9,6 +9,3 @@ CREATE TABLE IF NOT EXISTS userschema.user
         CONSTRAINT user_pkey PRIMARY KEY (id)
     )
 TABLESPACE pg_default;
---
---ALTER TABLE IF EXISTS userschema."user"
---        OWNER to postgres;

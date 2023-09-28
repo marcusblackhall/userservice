@@ -1,6 +1,7 @@
 package nl.ilovecoding.userservice;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import java.net.URI;
 import java.util.Map;
@@ -67,6 +68,7 @@ public class UserServiceIT {
 
         ResponseEntity<UserDto> userDtoResponseEntity = restTemplate.postForEntity(restUrl, user, UserDto.class);
         UserDto body = userDtoResponseEntity.getBody();
+        assertNotNull(body);
         log.info("Created user {}", body.getId());
         return body;
     }
@@ -109,7 +111,7 @@ public class UserServiceIT {
                 });
 
         Map<String, String> response = responseEntity.getBody();
-
+        assertNotNull(response);
         assertThat(response.get("email")).isEqualTo("Invalid email address");
     }
 
