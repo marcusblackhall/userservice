@@ -26,6 +26,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/userdb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=marcus
+      - SPRING_SECURITY_USER_NAME=marcus
+      - SPRING_SECURITY_USER_PASSWORD=mypassword
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     build: .
     healthcheck:
