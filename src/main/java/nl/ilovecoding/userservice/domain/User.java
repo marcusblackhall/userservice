@@ -2,11 +2,7 @@ package nl.ilovecoding.userservice.domain;
 
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.ToString;
 
 @Entity
@@ -22,6 +18,11 @@ public class User {
     private String email;
 
     private String name;
+
+
+    @Enumerated
+    @Column(columnDefinition = "smallint")
+    private UserType userType;
 
     public Integer getId() {
         return id;
@@ -47,6 +48,13 @@ public class User {
         this.email = email;
     }
 
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o)

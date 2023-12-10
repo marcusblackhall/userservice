@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: Demo for openapi
+  version: 0.0.1
+paths :
+
+  /users:
+    get:
+      tags:
+        - Users
+      operationId: getUsers
+      summary: retrieves all users
+      description: even more of a description
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: "#/components/schemas/User"
+components:
+  schemas:
+    User:
+      type: object
+      description: A User
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+
+
+
+

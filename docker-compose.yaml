@@ -14,7 +14,7 @@ services:
       POSTGRES_PASSWORD: marcus
     ports:
       - 5434:5432
-  # spring boot rest service
+# spring boot rest service
   users:
 
     container_name: users
@@ -34,13 +34,3 @@ services:
       timeout: 5s
       retries: 3
       start_period: 40s
-
-
-
-
-
-
-
-
-
-

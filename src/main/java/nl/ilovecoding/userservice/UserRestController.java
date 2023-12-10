@@ -1,34 +1,25 @@
 package nl.ilovecoding.userservice;
 
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import nl.ilovecoding.userservice.domain.User;
+import nl.ilovecoding.userservice.mappers.UserMapper;
+import nl.ilovecoding.userservice.model.UserDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.validation.Valid;
-import nl.ilovecoding.userservice.domain.User;
-import nl.ilovecoding.userservice.mappers.UserMapper;
-import nl.ilovecoding.userservice.model.UserDto;
-
 @RestController
 @RequestMapping(value = "/users")
-
+@Slf4j
 public class UserRestController {
 
     private final UserJpaRepository userJpaRepository;
@@ -41,6 +32,7 @@ public class UserRestController {
 
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {
+        log.info("Retrieving all users");
         List<User> users = userJpaRepository.findAll();
         return ResponseEntity.ok(
                 users.stream().map(userMapper::userToUserDto).collect(Collectors.toList()));
@@ -61,6 +53,7 @@ public class UserRestController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") Integer id) {
         Optional<User> user = userJpaRepository.findById(id);
+
         return user.map(value -> ResponseEntity.ok(userMapper.userToUserDto(value)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -68,6 +61,7 @@ public class UserRestController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
 
+        log.debug("Adding user: {} of type: {}",userDto.name(),userDto.userType());
         User user = userMapper.userDtoToUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 userMapper.userToUserDto(userJpaRepository.save(user)));

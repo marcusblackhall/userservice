@@ -9,5 +9,6 @@ import org.mapstruct.Mapper;
 public interface UserMapper {
 
     UserDto userToUserDto(User user);
- User userDtoToUser(UserDto userDto);
+
+    User userDtoToUser(UserDto userDto);
 }

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import java.net.URI;
 import java.util.Map;
 
+import nl.ilovecoding.userservice.domain.UserType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,37 +55,35 @@ public class UserServiceIT {
     
     @Test
     void shouldEditAUser() {
-        UserDto user = addUser();
-        user.setName("John Doe");
-        user.setEmail("jdoe@email.nl");
 
-        HttpEntity<UserDto> requestEntity = new HttpEntity<>(user);
-        ResponseEntity<UserDto> responseEntity = restTemplate.exchange(restUrl + "/" + user.getId(), HttpMethod.PUT, requestEntity, UserDto.class);
+        UserDto user = addUser();
+        UserDto changedUser = new UserDto(user.id(),"John Doe","jdoe@email.nl", UserType.ADMIN);
+
+        HttpEntity<UserDto> requestEntity = new HttpEntity<>(changedUser);
+        ResponseEntity<UserDto> responseEntity = restTemplate.exchange(restUrl + "/" + user.id(), HttpMethod.PUT, requestEntity, UserDto.class);
 
         UserDto updatedUser = responseEntity.getBody();
         assertNotNull(updatedUser);
-        assertThat(updatedUser.getName()).isEqualTo("John Doe");
-        assertThat(updatedUser.getEmail()).isEqualTo("jdoe@email.nl");
+        assertThat(updatedUser.name()).isEqualTo("John Doe");
+        assertThat(updatedUser.email()).isEqualTo("jdoe@email.nl");
     }
 
     @Test
     void shouldAddAUser() {
 
         UserDto body = addUser();
-        assertThat(body.getName()).isEqualTo("John Ball");
+        assertThat(body.name()).isEqualTo("John Ball");
 
     }
 
     @NotNull
     private UserDto addUser() {
-        UserDto user = UserDto.builder()
-                .name("John Ball")
-                .email("jball@email.nl").build();
+        UserDto user = new UserDto(null,"John Ball","jball@email.nl",UserType.STANDARD);
 
         ResponseEntity<UserDto> userDtoResponseEntity = restTemplate.postForEntity(restUrl, user, UserDto.class);
         UserDto body = userDtoResponseEntity.getBody();
         assertNotNull(body);
-        log.info("Created user {}", body.getId());
+        log.info("Created user {}", body.id());
         return body;
     }
 
@@ -92,10 +91,10 @@ public class UserServiceIT {
     void shouldDeleteUser() {
 
         UserDto body = addUser();
-        assertThat(body.getName()).isEqualTo("John Ball");
+        assertThat(body.name()).isEqualTo("John Ball");
 
-        restTemplate.delete(restUrl + "/" + body.getId());
-        ResponseEntity<UserDto> deletedUser = restTemplate.getForEntity(restUrl + "/" + body.getId(), UserDto.class);
+        restTemplate.delete(restUrl + "/" + body.id());
+        ResponseEntity<UserDto> deletedUser = restTemplate.getForEntity(restUrl + "/" + body.id(), UserDto.class);
         assertThat(deletedUser.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
@@ -115,7 +114,7 @@ public class UserServiceIT {
 
     @Test
     void shouldReturnEmailIsInvalid() {
-        UserDto user = UserDto.builder().name("Fred").email("invalidemail").build();
+        UserDto user = new UserDto(null,"Fred","invalidemail",UserType.ADMIN);
 
         RequestEntity<UserDto> request = RequestEntity
                 .post(URI.create(restUrl))
