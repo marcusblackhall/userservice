@@ -38,6 +38,7 @@ public class UserRestController {
                 users.stream().map(userMapper::userToUserDto).collect(Collectors.toList()));
 
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> editUser(@PathVariable("id") Integer id, @Valid @RequestBody UserDto userDto) {
         Optional<User> user = userJpaRepository.findById(id);
@@ -61,7 +62,7 @@ public class UserRestController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
 
-        log.debug("Adding user: {} of type: {}",userDto.name(),userDto.userType());
+        log.debug("Adding user: {} of type: {}", userDto.name(), userDto.userType());
         User user = userMapper.userDtoToUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 userMapper.userToUserDto(userJpaRepository.save(user)));
