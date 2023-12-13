@@ -67,6 +67,8 @@ Transfer-Encoding: chunked
 ```
 ## Using the service
 
+To delete,update
+
 All of the terminal commands below use [httpie](https://httpie.io). 
 ### Add a user
 
