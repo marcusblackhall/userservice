@@ -88,4 +88,11 @@ http DELETE :8080/users/1
 ## Stopping the service
 ```shell
 docker compose down
-`
+```
+
+## Keycloak 
+
+start keycloak with 
+```shell
+docker run -p 8090:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:22.0.0 start-dev
+```

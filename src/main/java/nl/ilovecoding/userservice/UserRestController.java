@@ -7,6 +7,10 @@ import nl.ilovecoding.userservice.mappers.UserMapper;
 import nl.ilovecoding.userservice.model.UserDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,7 @@ public class UserRestController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('users:read','users:write')")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         log.info("Retrieving all users");
         List<User> users = userJpaRepository.findAll();
@@ -60,8 +65,12 @@ public class UserRestController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('users:write')")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
 
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        log.info(authentication.getName());
         log.debug("Adding user: {} of type: {}", userDto.name(), userDto.userType());
         User user = userMapper.userDtoToUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -70,6 +79,7 @@ public class UserRestController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('users:write')")
     public ResponseEntity<Void> deleteUserById(@PathVariable Integer id) {
 
         Optional<User> byId = userJpaRepository.findById(id);
